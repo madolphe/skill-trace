@@ -1,0 +1,16 @@
+{
+  "name": "skill-trace",
+  "owner": { "name": "madolphe", "url": "https://github.com/madolphe" },
+  "description": "skill-trace: a Claude Code mod that traces skill and plugin activations and their real token cost.",
+  "plugins": [
+    {
+      "name": "skill-trace",
+      "source": "./plugins/skill-trace",
+      "description": "See which skills and plugins activated in your session, what triggered them, and what they really cost in tokens.",
+      "version": "0.1.0",
+      "author": { "name": "madolphe" },
+      "license": "MIT",
+      "keywords": ["skills", "plugins", "tokens", "cost", "prompt-caching", "mod"]
+    }
+  ]
+}

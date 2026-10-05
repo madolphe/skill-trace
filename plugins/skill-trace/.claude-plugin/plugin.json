@@ -1,0 +1,11 @@
+{
+  "name": "skill-trace",
+  "version": "0.1.0",
+  "description": "See which skills and plugins activated in your Claude Code session, what triggered them, and what they really cost in tokens (with prompt-cache pricing).",
+  "author": { "name": "madolphe", "url": "https://github.com/madolphe" },
+  "homepage": "https://github.com/madolphe/skill-trace",
+  "repository": "https://github.com/madolphe/skill-trace",
+  "license": "MIT",
+  "keywords": ["skills", "plugins", "tokens", "cost", "prompt-caching", "mod"],
+  "types": "./types/index.d.ts"
+}
