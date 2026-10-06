@@ -70,7 +70,7 @@ Cloud sessions do not load the mod at startup: project-level marketplaces in `.c
 
    > Load the mod in /opt/skill-trace/plugins/skill-trace with hot reloading.
 
-   Claude copies it into the session's mod folder.
+   Claude copies it into the session's mod folder. The hot-reload question appears only once Claude has loaded its `plugin-authoring` skill, which starts the watch on that folder. If no question appears, ask Claude to load the `plugin-authoring` skill first.
 3. Answer **Enable for this session** when Claude Code asks *"Enable hot reloading for this session?"*. The mod loads at the end of that turn.
 4. Run `/skill-trace inline`. The browser draws no pane or status line, so use `inline` to get the table in the conversation.
 
