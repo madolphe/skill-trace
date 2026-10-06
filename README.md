@@ -58,23 +58,28 @@ Then run `/skill-trace` in a session.
 
 ### On Claude Code on the web (claude.ai/code)
 
-Cloud sessions do not load the mod at startup: project-level marketplaces in `.claude/settings.json` are skipped, and a `CLAUDE_CODE_PLUGIN_DIRS` variable set in the environment's settings reaches the shell but not the running Claude Code process. Load it with hot reloading instead, once per session:
+Cloud sessions do not load the mod at startup: `/plugin` is not available there, project-level marketplaces in `.claude/settings.json` are skipped, and a `CLAUDE_CODE_PLUGIN_DIRS` variable set in the environment's settings reaches the shell but not the running Claude Code process. The mod is loaded with hot reloading instead, once per session.
 
-1. In your cloud environment's settings, add this to the **setup script**:
+At the start of a session, tell Claude:
 
-   ```bash
-   git clone --depth 1 https://github.com/madolphe/skill-trace /opt/skill-trace
-   ```
+> Install the skill-trace mod by following https://github.com/madolphe/skill-trace#instructions-for-claude-code-agents
 
-2. At the start of a session, ask Claude:
+Then answer **Enable for this session** when Claude Code asks *"Enable hot reloading for this session?"*, and run `/skill-trace inline`. The browser draws no pane or status line, so `inline` prints the table in the conversation. Activations that happened before the mod loaded are not counted.
 
-   > Load the mod in /opt/skill-trace/plugins/skill-trace with hot reloading.
+Optional: add `git clone --depth 1 https://github.com/madolphe/skill-trace /opt/skill-trace` to your cloud environment's **setup script** so the source is already in place.
 
-   Claude copies it into the session's mod folder. The hot-reload question appears only once Claude has loaded its `plugin-authoring` skill, which starts the watch on that folder. If no question appears, ask Claude to load the `plugin-authoring` skill first.
-3. Answer **Enable for this session** when Claude Code asks *"Enable hot reloading for this session?"*. The mod loads at the end of that turn.
-4. Run `/skill-trace inline`. The browser draws no pane or status line, so use `inline` to get the table in the conversation.
+### Instructions for Claude Code agents
 
-Activations that happened before the mod loaded are not counted.
+You were asked to install skill-trace in this session. Do these steps yourself, without asking the user to type anything else:
+
+1. **Get the source.** Use `/opt/skill-trace` if it exists. Otherwise run `git clone --depth 1 https://github.com/madolphe/skill-trace <your scratchpad>/skill-trace`. The mod is the `plugins/skill-trace` folder of that checkout.
+2. **Load the `plugin-authoring` skill** with the Skill tool. Its text names this session's mods folder (`/root/.claude/dev-mods/<session id>/`) and starts the engine's watch on it. Without this step, Claude Code never asks to enable hot reloading.
+3. **Copy the mod** into that folder: `cp -r <checkout>/plugins/skill-trace <mods folder>/skill-trace`. Copy the whole folder, including its hidden `.claude-plugin/` directory.
+4. **Check it** with `claude plugin validate <mods folder>/skill-trace`. It must end with `Validation passed`.
+5. **Tell the user**, in one short message, to answer **Enable for this session** when Claude Code asks *"Enable hot reloading for this session?"*. The mod loads when your turn ends.
+6. **Confirm** at the start of your next turn. The notice says whether the mod loaded. If it did, tell the user to run `/skill-trace inline` (on the web) or `/skill-trace` (terminal and desktop). If hot reloading was declined, tell the user that the mod loads only once they enable it, and that they can ask for the question again.
+
+Do not run `/plugin install`, and do not edit `.claude/settings.json` or the environment's variables: none of these load the mod in a cloud session.
 
 ## Commands
 
