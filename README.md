@@ -13,6 +13,7 @@ Skills are cheap to list and expensive to load: once a skill's text is in the co
   - one entry per activation with a colored trigger badge, the skill or plugin name, and a cost bar
   - the bar's track is the session's total real cost and is the same for every row. The colored segment is this activation's share of that total. The solid part is cache writes, the hatched part is cache reads.
   - press `t` to switch between chronological order and real-cost order
+- **A table in the conversation**: `/skill-trace inline` prints the same data as a Markdown table in the transcript, so the mod is usable where panes and the status line are not drawn, such as claude.ai/code in a browser.
 - **The same data for Claude**: `/skill-trace` also hands the table to the model as context, so you can ask Claude about it.
 
 ### What counts as an activation
@@ -60,6 +61,7 @@ Then run `/skill-trace` in a session.
 | Command | Effect |
 |---|---|
 | `/skill-trace` | Open or close the pane |
+| `/skill-trace inline` | Print the table in the conversation instead of opening the pane, for surfaces that draw no pane (the claude.ai web client) |
 | `/skill-trace nosvg` | Draw the bars with characters instead of SVG in the desktop app |
 | `/skill-trace svg` | Switch back to SVG bars |
 

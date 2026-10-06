@@ -176,7 +176,7 @@ export const register: Register = on => {
   on('session.start', async ($, e, next) => {
     await refresh($, list => withRealCost(pruneEmptyHooks(list)))
     try {
-      await $.command.register({ name: 'skill-trace', description: 'Show or hide the skills and plugins activated in this session and their token cost' })
+      await $.command.register({ name: 'skill-trace', description: 'Show or hide the skills and plugins activated in this session and their token cost', argumentHint: '[inline | nosvg | svg]' })
     } catch {}
     return next(e)
   })
@@ -186,9 +186,11 @@ export const register: Register = on => {
       live.useSvg = e.args.trim() === 'svg'
       return { text: `Desktop bars: ${live.useSvg ? 'SVG' : 'text'}.` }
     }
+    const table = tableMarkdown(await read($, activations), await read($, sort))
+    // Surfaces that draw no pane (the web client): the table goes in the transcript.
+    if (e.args.trim() === 'inline') return { text: table, context: [table] }
     // The engine's record of open panes survives a hot reload; a module flag would not.
     const pane = (await $.ui.panes()).find(p => p.id === PANE)
-    const table = tableMarkdown(await read($, activations), await read($, sort))
     if (pane?.isShown) {
       await $.ui.close({ id: PANE })
       return { text: 'skill-trace pane closed.', context: [table] }
