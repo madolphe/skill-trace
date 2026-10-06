@@ -115,3 +115,15 @@ test('I4: pending Skill keyed by short name and cleared after the call', async (
   const l = await list($)
   expect(l.at(-1)!.trigger.kind).toBe('manual')
 })
+
+test('/skill-trace inline prints the table in the transcript without opening the pane', async ($, on) => {
+  engine(on, $)
+  let opened = 0
+  on('ui.open', () => { opened += 1; return { isPlaced: true as const } })
+  await $.skill.prompt({ skill: 'pdf', text: 'a'.repeat(350) })
+  const r = await $.command.run({ command: 'skill-trace', args: 'inline' } as any)
+  expect(r.text).toContain('| Time | Skill / plugin |')
+  expect(r.text).toContain('pdf')
+  expect(r.context).toEqual([r.text])
+  expect(opened).toBe(0)
+})
