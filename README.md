@@ -56,6 +56,26 @@ The model and cache usage are read from each real request, so a model switch in 
 
 Then run `/skill-trace` in a session.
 
+### On Claude Code on the web (claude.ai/code)
+
+Cloud sessions do not load the mod at startup: project-level marketplaces in `.claude/settings.json` are skipped, and a `CLAUDE_CODE_PLUGIN_DIRS` variable set in the environment's settings reaches the shell but not the running Claude Code process. Load it with hot reloading instead, once per session:
+
+1. In your cloud environment's settings, add this to the **setup script**:
+
+   ```bash
+   git clone --depth 1 https://github.com/madolphe/skill-trace /opt/skill-trace
+   ```
+
+2. At the start of a session, ask Claude:
+
+   > Load the mod in /opt/skill-trace/plugins/skill-trace with hot reloading.
+
+   Claude copies it into the session's mod folder. The hot-reload question appears only once Claude has loaded its `plugin-authoring` skill, which starts the watch on that folder. If no question appears, ask Claude to load the `plugin-authoring` skill first.
+3. Answer **Enable for this session** when Claude Code asks *"Enable hot reloading for this session?"*. The mod loads at the end of that turn.
+4. Run `/skill-trace inline`. The browser draws no pane or status line, so use `inline` to get the table in the conversation.
+
+Activations that happened before the mod loaded are not counted.
+
 ## Commands
 
 | Command | Effect |
