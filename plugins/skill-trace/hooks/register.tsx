@@ -188,7 +188,9 @@ export const register: Register = on => {
     }
     const table = tableMarkdown(await read($, activations), await read($, sort))
     // Surfaces that draw no pane (the web client): the table goes in the transcript.
-    if (e.args.trim() === 'inline') return { text: table, context: [table] }
+    // A title line first: the engine prefixes the plugin's name to the text, which
+    // on the table's header row would break the Markdown table.
+    if (e.args.trim() === 'inline') return { text: `**Skills & plugins**\n\n${table}`, context: [table] }
     // The engine's record of open panes survives a hot reload; a module flag would not.
     const pane = (await $.ui.panes()).find(p => p.id === PANE)
     if (pane?.isShown) {
